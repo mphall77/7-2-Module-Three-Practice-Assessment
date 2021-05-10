@@ -12,7 +12,7 @@ const NavBar = () => {
 					width="50px"
 				/>
 			</NavLink>
-			<NavLink to="/pokeman">Pokemon</NavLink>
+			<NavLink to="/pokemon">Pokemon</NavLink>
 			<NavLink to="/locations">Locations</NavLink>
 			<NavLink to="/berries">Berries</NavLink>
 		</nav>
