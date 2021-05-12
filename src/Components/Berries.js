@@ -8,7 +8,7 @@ export default class Berries extends Component {
 		try {
 			const res = await axios.get("https://pokeapi.co/api/v2/berry/");
 			const berryArray = res.data.results;
-			this.setState({ berries: berryArray });
+			// this.setState({ berries: berryArray });
 		} catch (err) {
 			console.log(err);
 			this.setState({ berries: [] });
