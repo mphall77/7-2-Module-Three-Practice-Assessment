@@ -1,6 +1,8 @@
 nav {
 	display: flex;
 	justify-content: space-around;
+	align-items: center;
 	background-color: gold;
 	border-bottom: 3px solid lightgrey;
+	margin: auto;
 }

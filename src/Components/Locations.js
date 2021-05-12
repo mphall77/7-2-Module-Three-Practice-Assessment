@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-export default class Locations extends Component {
-	state = { locations: [], showText: false };
+class Locations extends Component {
+	state = { locations: [], showLocations: false };
 
-	loadLocations = async () => {
+	fetchLocations = async () => {
 		try {
 			const res = await axios.get("https://pokeapi.co/api/v2/location/");
-			const locationsArray = res.data.results;
-			this.setState({ locations: locationsArray });
+			this.setState({ locations: res.data.results });
 		} catch (err) {
 			console.log(err);
 			this.setState({ locations: [] });
@@ -16,28 +15,34 @@ export default class Locations extends Component {
 	};
 
 	componentDidMount() {
-		this.loadLocations();
+		this.fetchLocations();
 	}
 
-    toggleButton = () => {
-         this.setState((prevState) => ({ showText: !prevState.showText }));
+	toggleButton = () => {
+		this.setState((prevState) => ({ showLocations: !prevState.showLocations }));
 	};
 
 	render() {
-		const { locations, showText } = this.state;
+		const { locations, showLocations } = this.state;
 
 		return (
-			<div>
+			<section>
 				<h2>List of Locations</h2>
 				<button onClick={() => this.toggleButton()}>
-					{showText ? "Hide Locations" : "Show Locations"}
+					{showLocations ? "Hide Locations" : "Show Locations"}
 				</button>
-				{showText && <ul>
-					{this.state.locations.map((location) => {
-						return <li key={location.name}>{location.name}</li>;
-					})}
-				</ul>}
-			</div>
+				{showLocations ? (
+					<ul>
+						{locations.map((location) => {
+							return <li key={location.name}>{location.name}</li>;
+						})}
+					</ul>
+				) : (
+					<ul></ul>
+				)}
+			</section>
 		);
 	}
 }
+
+export default Locations;

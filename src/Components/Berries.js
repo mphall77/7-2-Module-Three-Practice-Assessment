@@ -1,37 +1,63 @@
 import axios from "axios";
 import React, { Component } from "react";
 
-export default class Berries extends Component {
-	state = { berries: [] };
+class Berries extends Component {
+	state = {
+		berries: [],
+		selectedBerryURL: "",
+		flavors: [],
+		firmness: {},
+	};
 
-	loadBerries = async () => {
+	fetchBerries = async () => {
 		try {
 			const res = await axios.get("https://pokeapi.co/api/v2/berry/");
-			const berryArray = res.data.results;
-			this.setState({ berries: berryArray });
+			this.setState({ berries: res.data.results });
 		} catch (err) {
-			console.log(err);
 			this.setState({ berries: [] });
 		}
 	};
 
+	selectBerry = async (e) => {
+		this.setState({ selectedBerryURL: e.target.value });
+		try {
+			const res = await axios.get(e.target.value);
+			this.setState({ firmness: res.data });
+			this.setState({ flavors: res.data.flavors });
+		} catch {
+			this.setState({ firmness: {} });
+		}
+	};
+
 	componentDidMount() {
-		this.loadBerries();
+		this.fetchBerries();
 	}
 
 	render() {
-		const { berries } = this.state;
-		const berryOptions = berries.map((berry) => (
-			<option value={berry.name} key={berry.url}>
-				{berry.name}
-			</option>
-		));
-		return (
-			<div>
-				<h2>Select a Type</h2>
+		const { berries, selectedBerryURL, firmness, flavors } = this.state;
 
-				<select>{berryOptions}</select>
-			</div>
+		return (
+			<section>
+				<h2>Select a Type</h2>
+				<select value={selectedBerryURL} onChange={this.selectBerry}>
+					<option value="" selected></option>
+					{berries.map((berry) => (
+						<option value={berry.url} key={berry.url}>
+							{berry.name}
+						</option>
+					))}
+				</select>
+				<p>{firmness.name}</p>
+				<p>{firmness.firmness && firmness.firmness.name}</p>
+
+				<ul>
+					{flavors.map((flavor) => (
+						<li>{flavor.flavor.name}</li>
+					))}
+				</ul>
+			</section>
 		);
 	}
 }
+
+export default Berries;
