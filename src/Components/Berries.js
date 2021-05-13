@@ -6,12 +6,12 @@ const Berries = () => {
 	const [berries, setBerries] = useState([]);
 	const [selectedBerryURL, setSelectedBerryURL] = useState("");
 	const [selectedBerry, setSelectedBerry] = useState({});
+	const [flavors, setFlavors] = useState([]);
 
 	// function to call API
 	const fetchBerries = async () => {
 		try {
 			const res = await axios.get("https://pokeapi.co/api/v2/berry/");
-			debugger;
 			setBerries(res.data.results);
 		} catch (err) {
 			setBerries([]);
@@ -29,10 +29,22 @@ const Berries = () => {
 		try {
 			const res = await axios.get(e.target.value);
 			setSelectedBerry(res.data);
+			setFlavors(res.data.flavors);
 		} catch (err) {
 			setSelectedBerry({});
 		}
 	};
+
+	// selectBerry = async (e) => {
+	// 	this.setState({ selectedBerryURL: e.target.value });
+	// 	try {
+	// 		const res = await axios.get(e.target.value);
+	// 		this.setState({ firmness: res.data });
+	// 		this.setState({ flavors: res.data.flavors });
+	// 	} catch {
+	// 		this.setState({ firmness: {} });
+	// 	}
+	// };
 
 	return (
 		<section>
@@ -54,7 +66,11 @@ const Berries = () => {
 			<p>{selectedBerry.name}</p>
 			<p>{selectedBerry.firmness && selectedBerry.firmness.name}</p>
 
-			<ul>{}</ul>
+			<ul>
+				{flavors.map((flavor) => (
+					<li key={flavor.name}>{flavor.flavor.name}</li>
+				))}
+			</ul>
 		</section>
 	);
 };
